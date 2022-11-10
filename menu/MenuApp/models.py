@@ -8,6 +8,7 @@ class MenuItem(models.Model):
     spicy_level = models.IntegerField(null=True)
     category = models.ForeignKey("Category", on_delete=models.CASCADE,)
     cuisine = models.ForeignKey("Cuisine", on_delete=models.CASCADE,)
+    ingredients = models.ManyToManyField("Ingredient",)
     def __str__(self):
         return self.title + ' : ' + str(self.price) + '$'
 
@@ -20,3 +21,8 @@ class Cuisine(models.Model):
     title = models.CharField(max_length=200)
     def __str__(self):
         return self.title
+
+class Ingredient(models.Model):
+    ingredient = models.CharField(max_length=200)
+    def __str__(self):
+        return self.ingredient

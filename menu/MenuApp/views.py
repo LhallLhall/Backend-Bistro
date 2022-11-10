@@ -1,15 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import MenuItem, Category, Cuisine
+from .models import MenuItem, Category, Cuisine, Ingredient
 from django.forms.models import model_to_dict
 
 # Create your views here.
 def index(request):
     item_list = []
     items = MenuItem.objects.all()
+    # ingredients = 
     for item in items:
         cat_model_instance = Category.objects.get(id=item.category_id)
-        cuisine_model_instance = Cuisine.objects.get(id=item.category_id)
+        cuisine_model_instance = Cuisine.objects.get(id=item.cuisine_id)
+        # ingredients_model_instance = Ingredient.objects.get(id=item.ingredient_id)
         item_list.append({
             'title': item.title,
             'description': item.description,
@@ -22,7 +24,9 @@ def index(request):
             'cuisine': {
                 'id': cuisine_model_instance.id,
                 'title': cuisine_model_instance.title,
-            }
+            },
+            'ingredients': list(item.ingredients.values('ingredient')),
+            
         })
 
     return JsonResponse({'data': item_list})
