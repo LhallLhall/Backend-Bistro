@@ -25,27 +25,26 @@ SECRET_KEY = 'django-insecure-6#l47q!_^8^2umiyj+o@-7&b^10i2tfi-37g94y73&76=$$n&u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-CSRF_TRUSTED_ORIGINS = ['https://*.gitpod.io']
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.gitpod\.io$",
-]
+ALLOWED_HOSTS = ['*']
 
-
+X_FRAME_OPTIONS = "same-origin"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
 # Application definition
 
 INSTALLED_APPS = [
-    'MenuApp.apps.MenuappConfig',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "corsheaders",
+    'MenuApp',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,8 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = 'menu.urls'
@@ -139,3 +136,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = ['https://*.gitpod.io']
+
+CORS_ALLOWED_ORIGINS_REGEXES = [
+    r"^https://.*\.gitpod\.io$",
+]
+
+CORS_ORIGIN_ALLOW_ALL = DEBUG
