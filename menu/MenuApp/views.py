@@ -7,11 +7,11 @@ from django.forms.models import model_to_dict
 def index(request):
     item_list = []
     items = MenuItem.objects.all()
-    # ingredients = 
+    
     for item in items:
         cat_model_instance = Category.objects.get(id=item.category_id)
         cuisine_model_instance = Cuisine.objects.get(id=item.cuisine_id)
-        # ingredients_model_instance = Ingredient.objects.get(id=item.ingredient_id)
+        
         item_list.append({
             'title': item.title,
             'description': item.description,
@@ -25,9 +25,24 @@ def index(request):
                 'id': cuisine_model_instance.id,
                 'title': cuisine_model_instance.title,
             },
-            'ingredients': list(item.ingredients.values('ingredient')),
+            'ingredients': ''.join(str(list(item.ingredients.values_list('ingredient')))),
+            # join([str(x) for x in Ingredient.objects.get(pk=ingredient_id).ingredient.all()])
             
         })
-
     return JsonResponse({'data': item_list})
-    # 
+    #
+def filtered_cat(request, category):
+    filtered_list = list(MenuItem.objects.filter(category__title=category).values())
+    
+    if len(filtered_list) >= 1:
+        return JsonResponse({'data': filtered_list})
+    else:
+        return HttpResponse('Error: There were no items in '+category)
+    return JsonResponse({'data': filtered_list})
+
+def filtered_cuisine(request, cuisine):
+    filtered_list = list(MenuItem.objects.filter(cuisine__title=cuisine).values())
+    if len(filtered_list) >= 1:
+        return JsonResponse({'data': filtered_list})
+    else:
+        return HttpResponse('Error: There were no items in '+ category)
